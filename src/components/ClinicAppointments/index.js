@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from "react-router-dom"
+import isEmpty from 'lodash/isEmpty'
 
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -25,9 +26,9 @@ export default function ClinicAppointments({
 
         http://localhost:3000/schedules/1?employees=3,4,5,6
     */
-    let [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams()
 
-    let employeesParams = searchParams.get('employees')
+    const employeesParams = !isEmpty(searchParams.get('employees'))
         ? searchParams.get('employees').split(',')
         : []
 
@@ -53,8 +54,6 @@ export default function ClinicAppointments({
             employees: values.join(',')
         })
     }
-
-    console.log(appointments)
 
     return (
         <Grid container spacing={2}>

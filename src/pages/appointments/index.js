@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
 import moment from 'moment'
 
 import Box from '@mui/material/Box'
@@ -25,21 +25,22 @@ export default function Appointments() {
 
         http://localhost:3000/schedules/:clinicId
     */
-    let params = useParams()
+    const params = useParams()
+    const [searchParams, setSearchParams] = useSearchParams()
 
-    let [clinics, setClinics] = useState()
+    const [clinics, setClinics] = useState()
 
-    let [selectedClinic, setSelectedClinic] = useState(params?.clinicId)
+    const [selectedClinic, setSelectedClinic] = useState(params?.clinicId)
 
     // Date is hardcoded
-    let dateMoment = moment("04-11-2022")
-    let date = dateMoment.toDate()
-    let dateFormatted = dateMoment.format('MM/DD/YYYY')
+    const dateMoment = moment("04-11-2022")
+    const date = dateMoment.toDate()
+    const dateFormatted = dateMoment.format('MM/DD/YYYY')
 
     useEffect(() => {
         // useEffect doesn't support async/await so we define fetchData and invoke fetchData
         const fetchData = async () => {
-            let clinic = new ClinicService()
+            const clinic = new ClinicService()
 
             const data = await clinic.list()
         
@@ -49,7 +50,12 @@ export default function Appointments() {
         fetchData()
     }, [])
 
-    let activeClinic = clinics && clinics.find(clinic => clinic?.data?.id === selectedClinic)
+    const activeClinic = clinics && clinics.find(clinic => clinic?.data?.id === selectedClinic)
+
+    const onClinicSelect = (value) => {
+        setSelectedClinic(value)
+        setSearchParams({})
+    }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -67,7 +73,7 @@ export default function Appointments() {
                             <ClinicSelect
                                 initialValue={params?.clinicId}
                                 clinics={clinics && clinics} 
-                                onClick={setSelectedClinic}
+                                onClick={onClinicSelect}
                             />
                         )}
                     </Box>

@@ -10,9 +10,9 @@ export default function Schedule({
     appointments,
     employees
 }) {
-    let resources = mapEmployeesToResources(employees, clinic.employees)
+    const resources = mapEmployeesToResources(employees, clinic.employees)
     
-    let events = resources.length === 0 
+    const events = resources.length === 0 
         ? [] 
         : mapAppointmentsToEvents(appointments)
 
